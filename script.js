@@ -6,6 +6,8 @@ const convertObjToString = (obj) => JSON.stringify(obj) || '';
 
 const getTodos = () => convertStringToObj(localStorage.getItem(storageKey));
 
+const filterTodos = (searchStr) => getTodos().filter(todo => todo.toLowerCase().includes(searchStr.toLowerCase()));
+
 const addTodo = (todo) => localStorage.setItem(storageKey, convertObjToString([...getTodos(), todo]));
 
 const deleteTodo = (todo) => localStorage.setItem(storageKey, convertObjToString(getTodos().filter(_todo => _todo !== todo)));
@@ -27,7 +29,16 @@ const displayTodos = () => {
     clearInput();
     clearTodoListDisplay();
     getTodos().forEach(_todo => appendLiToDom(buildTodoEl(_todo)));
+    initSearchListener();
     initClickListeners();
+}
+const initSearchListener = () => {
+  document.getElementById('search-input').addEventListener('keyup', ($event) => {
+    const filtered = filterTodos($event.target.value);
+    clearTodoListDisplay();
+    filtered.forEach(_todo => appendLiToDom(buildTodoEl(_todo)));
+    initClickListeners();
+  });
 }
 const initClickListeners = () => {
     Array.from(document.getElementsByClassName("list-group-item")).forEach(_item => {
@@ -50,8 +61,3 @@ document.getElementById("submit-new-todo-btn").addEventListener("click", ($event
         displayTodos();
     }
 });
-
-// document.getElementById("reset-storage-btn").addEventListener("click", ($event) => {
-//     localStorage.removeItem(storageKey);
-//     displayTodos();
-// });

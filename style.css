@@ -7,7 +7,9 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
 }
-
+#search-input {
+  margin-bottom: 15px;
+}
 #main {
     width: 520px;
     margin-left: calc(50% - 260px);
